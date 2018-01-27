@@ -1,6 +1,8 @@
 package adapter
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestOldPrinterAdapter(t *testing.T) {
 	adapter := NewPrinterImpl{
@@ -23,4 +25,5 @@ func TestNewPrinterAdapter(t *testing.T) {
 	if msg != "new Adapter msg" {
 		t.Fatalf("new interface adapter got wrong return msg: %s\n", msg)
 	}
+
 }
