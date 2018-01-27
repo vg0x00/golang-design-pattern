@@ -1,0 +1,23 @@
+bridge pattern:
+
+info:
+    名为bridge pattern, 那么搭桥的两头分别是什么呢? 一端是接口实现, 另一端就是一个抽象的对象
+    对外提供功能.
+
+    对于接口A 又实现a, 实现b, 如果需要更新接口实现a, 或者进行替换工作, 介于尽可能少更改旧代码
+    这条惰性定律, 那么创建一个新实现new_a, 此时就要将涉及到实现a的地方更换为new_a, Boom!
+
+    创建一个abstract obj, 包裹接口A, 在代码中调用接口A的方法, 那么更新动作只有在abstract obj
+    构造时的参数改为new_a, 由于abstract obj 这层layer的存在, 在公共方法中又可以区分对待, 例如
+    在PrinterAbstraction 中的Print方法, 对不同的Printer API Implementation在Print方法中
+    区分对待.
+note:
+    结合了Composite pattern
+    在接口实现外又添加了一层abstract layer interface, 通过该interface 定义的公共接口来编程.
+    模式: 接口(实现1, 实现2, 实现3)----> 接口
+    接口外再次套一个接口, 这样给内侧接口实现还是修改都提供了空间.
+
+
+这依旧是一个懒人模式, 为了在添加或者改动代码时, 尽可能少的修改旧代码.(or 实现了可拓展? 可维护?)
+在全局代码掌握不充分, 或者要免责, 亦或是少给其他开发者带来麻烦, 想起了<<rework>>, 妥协?不存在的,
+推翻重干!
