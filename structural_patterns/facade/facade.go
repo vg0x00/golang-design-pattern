@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-// mast outside API to these two acitons
+// mask outside API to these two acitons
 type CurrentWeatherGetter interface {
 	GetByCountryAndCityCode(countryCode, cityCode string) (Weather, error)
 	GetByGeoCoordinates(lat, lon float32) (Weather, error)
