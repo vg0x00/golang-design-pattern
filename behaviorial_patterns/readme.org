@@ -1,0 +1,26 @@
+* behavioral pattern
+
+Programming in general: 
+
+#+BEGIN_EXAMPLE
+DataFORM_IN --> [Code Block] --> DATAFORM_OUT
+                             --> DATAFORM_OUT
+#+END_EXAMPLE
+
+Behaviorial pattern 与 Structual pattern 侧重点不同, 前者关注Data如何组织,
+后者关注点在数据处理过程的实现与分区, 也就是上图里的对数据进行处理的[Code Block]
+
+* Intro
+   - Stratey
+     同接口的不同实现, 更改Data的走向或者处理方式, 例如:
+     同一个io.Writer 接口, 有两个实现:
+     abstractA 实现写入到console
+     abstractB 实现写入到log
+     根据需要选择是用A 还是用 B, 这个选择可以根据程序配置或者不同的触发条件.
+     调用方无需关注Writer 接口的实现, 完成实现与功能(或者说接口)之间的解耦.
+
+     (这也叫一种模式? 接口或者泛泛点说, 规定的function(method) collection 本来就
+     多实例不同实现, 根据需求创建不同的实例, 继而执行具体的方法, 为的是解耦实现, 没想
+     居然是一种pattern)
+   - Chain of resposibility
+   - Command design

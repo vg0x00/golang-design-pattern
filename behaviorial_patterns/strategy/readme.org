@@ -1,0 +1,85 @@
+* strategy pattern
+
+不同对象各自实现相同接口, 根据需要, 跟去所需
+
+** go image draw.Draw() 
+
+人类总是喜欢享福而逃避苦难, 而strategy 过程中的小苦难并不是strategy 的思想和实现
+而是通过golang standard libary 实现画个简单的图
+
+*** General
+
+先不要理会lib如何实现, 观察下图像文件创建这个动作的输入和输出是什么?
+输入: unit-color, position, alpha, size, 这些信息如何排列?
+temp: buffer
+输出: []byte, 将其通过特定的编码写入文件, 形成图像文件
+
+*** Lib 实现
+
+接口: Image 
+部分实现: image.Uniform 单一色彩图, 同时实现了color.ColorMode, color.Color
+         image.NewRGBA
+
+Image充当了输入输出之间的buffer, 同时作为各种图像格式通信的通用接口
+#+BEGIN_SRC golang
+type Image interface {
+    ColorMode() color.Mode // interface->各种色彩排列方式之间互相转换
+    Bounds() Rectangle // 图像范围
+    At(x, y) color.Color // 指定位置的pixel Color
+}
+#+END_SRC
+
+写入文件也是通过传入jpeg.Encode(io.Writer, image.Image, quality) 将数据最终写入到Writer中
+
+为了获取最终的Image接口的实现, 例如简单的单色图, 构建&image.Uniform{}? 
+不行, 此类型bounds 无限大
+其实, 文档已经告诉我们了, 通过两个方法来获取Image: NewRGBA 和 NewPaletted
+
+NewRGBA 构建参数就提供了rectangle信息, 同时提供了设置pixel 色彩信息的Set 和 SetRGBA
+
+为了避免去循环设置pixel 颜色信息, 代码中使用了draw.Draw(), 这是干嘛的? 
+后来也发现, 只是码字少了, 逃不了遍历.
+*** draw.Draw() 
+
+实际调用了mask 为空的DrawMask 方法
+该方法首先确定实际要操作的范围, 通过clip方法实现
+#+BEGIN_SRC golang
+// clip clips r against each image's bounds (after translating into the
+// destination image's coordinate space) and shifts the points sp and mp by
+// the same amount as the change in r.Min.
+func clip(dst Image, r *image.Rectangle, src image.Image, sp *image.Point, mask image.Image, mp *image.Point) {
+	orig := r.Min
+	*r = r.Intersect(dst.Bounds())
+	*r = r.Intersect(src.Bounds().Add(orig.Sub(*sp)))
+	if mask != nil {
+		*r = r.Intersect(mask.Bounds().Add(orig.Sub(*mp)))
+	}
+	dx := r.Min.X - orig.X
+	dy := r.Min.Y - orig.Y
+	if dx == 0 && dy == 0 {
+		return
+	}
+	sp.X += dx
+	sp.Y += dy
+	if mp != nil {
+		mp.X += dx
+		mp.Y += dy
+	}
+}
+#+END_SRC
+
+这里的rectangle 是什么意思, 其实就是取景框, 实际操作的并不都是图片文件的全部, 而只是一部分
+只对这部分数据进行处理
+通过 [[https://blog.golang.org/go-imagedraw-package][image-draw]] 来看出:
+r: dst 中的框
+sp: source image 中rectangle 的位置
+mp: mask image 位置
+
+取到rectangle 与dst 的交集, 然后, 分别将src 和mask (如果有的话) 根据各自的sp 和 mp位置信息
+将各自图里的rectangle进行偏移, 使之与dst与orginRectangle 交集位置(minX, minY) 重叠
+
+最后分出两个策略: Src 和 Over
+Src 就是直接将截取的SRC 图片堆叠到DST的recangle位置, 跟贴膏药一样
+OVER 构建一个SRC layer 放在dst 之上, 根据src layer的alpha 来得到最终成像.
+
+在SRC 或者 OVER这两个策略中去遍历pixel, 设置颜色
