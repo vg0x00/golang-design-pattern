@@ -25,3 +25,24 @@ chain of resposibily pattern 似乎是一种执行路线的反复, 与递归不�
 这个field 的固定方法, 然后如此往复.
 整个执行链条是在线性拓展
 #+END_QUOTE
+
+** 不足
+看到NextChain的Next执行逻辑是在本单元的Next方法中, 整个ChainOfResponsibility 的执行在最初
+的Next 方法
+
+#+BEGIN_SRC 
+running stack
+
+{...
+    first code block
+    {...
+    second code block
+        {...
+        last code block
+        }
+    }
+}
+#+END_SRC
+
+- 如果chain过长, Stack就会过大
+- 同时, 这里面还可能包含循环链, 当然, 没人会重复执行功能单元
