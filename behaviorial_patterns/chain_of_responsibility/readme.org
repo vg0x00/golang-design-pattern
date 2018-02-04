@@ -1,0 +1,27 @@
+* chain of responsibility 
+  
+** 拆分
+- 功能单元: 一个结构实现了某个功能(function)
+- 将功能单元串联, 也就是当前单元中, 保存下一个单元的指针.
+- 为了保持接口一致, 各单元的功能接口一样, 假设为Next(), 其具体实现的功能各不相同, 其中如果
+  下一个单元指针不为空, 那么执行下一个单元的Next()
+
+#+BEGIN_SRC 
+start --> chainA.Next() --> chainB.Next() --> chainC.Next() --> end
+#+END_SRC
+
+** Closure
+
+- 简化了real code 的书写, 但给测试带来了繁杂, 让测试代码不那么整洁
+- 破坏了block 的限制, Like Magic, 但我不喜欢
+- 总体代码差不多, 只是将维护成本从原来的source code 迁移到了 unit test 代码中
+
+** NOTE
+
+chain of resposibily pattern 似乎是一种执行路线的反复, 与递归不同, 返回的并不是本身,
+而是下一个执行单元:
+#+BEGIN_QUOTE
+如果本身field 不为空, 那么执行
+这个field 的固定方法, 然后如此往复.
+整个执行链条是在线性拓展
+#+END_QUOTE
