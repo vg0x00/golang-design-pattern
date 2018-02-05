@@ -1,0 +1,44 @@
+* command pattern
+* diff strategy pattern 
+
+- strategy 模式是一种执行路径的分裂, 在运行时动态根据需要将数据流导向不同的路径
+
+#+BEGIN_EXAMPLE
+strategy pattern (runtime or dynamic routing)
+
+start --> (same interface) which path to go? --> path 1 
+                                             --> path 2
+                                             --> path 3
+#+END_EXAMPLE
+
+- command pattern 犹如: 预备......跑!
+  
+  将要执行的逻辑写好, 保存在command container中, 在条件满足时, 触发这个预先设置好的动作
+
+- 关于发送命令的拆解, 与OOP中message passing 相同
+#+BEGIN_EXAMPLE
+command ---> receiver --> run
+#+END_EXAMPLE
+  构建的指令就包含了接受者和命令两个信息, 此时, 如果添加个触发机制呢? 在中键环节添加invoker
+  变成了:
+
+#+BEGIN_EXAMPLE
+command -----> invoker ----> receiver ---> run
+#+END_EXAMPLE
+
+如果多条指令呢?
+
+#+BEGIN_EXAMPLE
+construct comamnd A -------+           (invoker)                              (receiver)
+                           |       +-------------------+  
+                           +---->  |                   |
+construct comamnd B -------+---->  | command container | ----> trigger? ----> RUN ALL!!!
+                                   |                   |
+construct comamnd C -------+---->  +-------------------+
+
+#+END_EXAMPLE
+
+整体而言就是在 =call -> run code= 这一简单执行动作之间添加了两个layer, 一个是invoker, 决定
+何时触发, 同时也可作为command 的容器, 第二个layer就是receiver, 决定执行人
+
+strategy 和 command 都是: 分 - 总 - 分 结构, 前者侧重完成同任务的不同方法, 而后者侧重完成不同的任务
