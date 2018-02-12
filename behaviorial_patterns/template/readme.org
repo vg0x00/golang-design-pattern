@@ -1,0 +1,12 @@
+* template pattern
+  template pattern divides task into two parts in general, first part is library developer
+  's job, the second part is users' own job.
+
+  not like template in CPP aiming for code generation, template pattern aims for task processing.
+
+#+BEGIN_SRC 
+running path ----->                               +--------> continue(lib part)
+                  |                               |
+                  |                               |
+                  +--------> user's code -------> +                  (user custom part)
+#+END_SRC
