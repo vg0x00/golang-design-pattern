@@ -1,0 +1,30 @@
+* memento pattern
+
+  memento /mə'mæntəuɔ/ : An object kept as a reminder of a person or event
+  可以让你回忆起人和事的东西, 多么诡异的名字.
+  个人喜欢叫他rollbackable pattern, 目的就是提供undo(rollback), history之类的操作.
+
+** 组成
+   跟virtual machine 快照逻辑类似, 根据当前程序状态, 创建snapshot, 保存, 以备后续恢复使用.
+   书中使用的并非snapshot 这类词来表述, 只是个人觉得更形象罢了.
+
+   分类有三: snapshot, snapshotContainer, snapshotCreator
+
+  - snapshot
+    既然要状态可回溯, 那么就要保存那个时间点的context, 包含全部context信息的集合抽象出一个类型, 我
+    自称他为snapshot类型(书里叫什么memento???)
+  - snapshot creator
+    snapshot 类型创建者, 根据要追踪的状态生成snapshot
+  - snapshot container (snapshot list)
+    snapshot 数据的集合, 并维持了顺序关系.
+    
+#+BEGIN_EXAMPLE
+processing path  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>+>>>
+                     |                |            |                 |        |
+                  snapshot1        snapshot2    snapshot3       snapshot4     |
+                                                                     +<<<<<<<<+
+#+END_EXAMPLE
+
+** tips
+   在示例代码中, snapTracker 和 origin 之间并非使用State 直接联系, 而是添加了snapshot这个
+   抽象层, 以此来让snapTracker 和origin 脱离具体的State实现.
