@@ -1,0 +1,40 @@
+* interpreter pattern
+  
+  communicate through an interpreter
+
+  如C, Python, C++ 这类高级语言, 都可以看做是低级语言的interpreter, 通过对源代码的compile, 转
+  换成了对应的bit code, 继而送给CPU 执行.
+
+  SQL: 经过解析后执行动作集合: insert, update, query, delete操作.
+
+  编程环境里使用这个模式, 估计不会构建一个interpreter 的语法解析器, 再处理对应
+
+** core
+   设计一个language, 规定了syntax, 并规划好可以实现的功能, 构建syntax parser, 解析并执行.
+   (万万没想到, 还真是写一个syntax parser, 这居然是一种设计模式.....)
+
+   编程界的language 实在是太多了 :(
+
+#+BEGIN_EXAMPLE
+   task  <---> language <---> parser <---> function implementation
+#+END_EXAMPLE   
+   
+** steps
+
+   3 4 sum 2 sub   ----> 4 sum 3 sub 2 ===> result: 5
+#+BEGIN_SRC 
+simple revert polish notification caculator steps:
+
+split command string with space into symbols array
+create a caculator stack
+loop all symbols
+    if symbol is operator
+        get this operator's function
+        pop right and left params // order is IMPORTANT
+        push result into stack
+    else (symbol is value)
+        convert symbol string into value type
+        push it into stack
+
+final result is the last value in stack, pop and return
+#+END_SRC
