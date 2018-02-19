@@ -1,0 +1,22 @@
+* visitor pattern
+  感觉和template 模式思想差不多, 都是decouple一些操作到外部对象, 通过外部对象的不同拼接,
+  实现功能灵活搭配. 
+
+  回顾了下自己go 实现, template 模式中子程序的调用都是在lib中写死的. 而visitor 模式中,
+  将子程序调用集中到了visitable object 的accept方法中, 如果visitor 要改变visitable 
+  对象的内部状态, 那么就要用到指针, 打破了数据隐藏
+
+  写到这, 似乎template 和visitor 两个模式在自己实现的过程中的区别就是: template没有使用
+  接口, 直接在lib实现中调用子程序, 而visitor 是使用接口版的template, 同时提供了一层方法
+  调用抽象: Accept
+
+** 组成
+  - visitor (interface)
+  - visitable: accept visitor object and call visitor's sub function
+
+** note
+  visitor 模式是不是和callback差不多? 
+  - 预先设计好接口类型
+  - 构建visitor(callback handler), 
+  - accept(register callback handler)
+  - call sub-function on main object
