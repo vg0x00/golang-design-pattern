@@ -1,0 +1,16 @@
+* mediator pattern
+
+  #+BEGIN_QUOTE
+  Mediator pattern is the perfect example of a pattern that is commonly used by us 
+  without thinking very much about it.
+  #+END_QUOTE
+
+  说的好像不用费脑子, 下笔就出来的样子.
+
+  其实, 看过一遍说明和实现, 感觉这个模式就是要对两个类型进行操作, 而将两个类型之间的关联做到最小.
+  最小? 不存在的, 只是把这些脏活集中藏到Mediator 内部. 让外部看起来清爽些.
+
+  看实例: simple caculator { sum, sub }
+   
+  sum, sub 分别接受两个参数, 每个类型都设定为interafce, 通过内部switch value.(type) 来
+  实现route 操作.
