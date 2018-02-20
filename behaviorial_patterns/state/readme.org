@@ -17,3 +17,6 @@
    game init -----------> game loop ---------> game end
    (execute init)       (execute loop)       (execute end)
    #+END_SRC
+   
+   感觉和strategy 模式差不多, 都是由某条件改变执行动作路径, 他们都事先规定好了接口, 在执行过程中
+   根据条件更改processing path.
