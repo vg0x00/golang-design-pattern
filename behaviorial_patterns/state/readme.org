@@ -1,0 +1,19 @@
+* state pattern
+
+  对象包含了数据和动作, 对象可以根据自身状态的改变, 更改动作实现, 各个状态之间不互相依赖.
+
+** 实例
+
+   猜数字游戏
+
+   状态分解:
+   - 初始 设置游戏
+   - 运行 执行游戏逻辑
+   - 结束
+
+   每个状态抽象出了同样的方法, 根据自身状态不同, 执行不同动作实现
+
+   #+BEGIN_SRC 
+   game init -----------> game loop ---------> game end
+   (execute init)       (execute loop)       (execute end)
+   #+END_SRC
